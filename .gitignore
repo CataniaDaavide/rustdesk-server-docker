@@ -1,0 +1,5 @@
+# Chiave privata del server: non va MAI nel repository
+data/
+
+# IP della VPS
+.env

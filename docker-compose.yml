@@ -1,0 +1,28 @@
+name: rustdesk
+
+services:
+  # Registra gli ID dei PC e li mette in contatto
+  rustdesk-id-server:
+    container_name: rustdesk-id-server
+    image: rustdesk/rustdesk-server:latest
+    command: hbbs -r ${IP_VPS}:21117
+    volumes:
+      - ./data:/root
+    ports:
+      - "21115:21115"
+      - "21116:21116"
+      - "21116:21116/udp"
+    depends_on:
+      - rustdesk-relay-server
+    restart: unless-stopped
+
+  # Fa passare il traffico quando il collegamento diretto non riesce
+  rustdesk-relay-server:
+    container_name: rustdesk-relay-server
+    image: rustdesk/rustdesk-server:latest
+    command: hbbr
+    volumes:
+      - ./data:/root
+    ports:
+      - "21117:21117"
+    restart: unless-stopped
